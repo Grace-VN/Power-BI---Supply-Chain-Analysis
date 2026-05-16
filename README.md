@@ -361,13 +361,13 @@ Supplier quality significantly impacts procurement cost. Lower-priced suppliers 
 
 ## Supplier Selection Dashboard
 
-![Dashboard](images/Supplier Selection Dashboard.png)
+![Dashboard](images/Supplier-Selection-Dashboard.png)
 
 ---
 
 ## Scenario Planning Dashboard
 
-![Dashboard](images/Scenario Planning Dashboard.png)
+![Dashboard](images/Scenario-Planning-Dashboard.png)
 
 ---
 
