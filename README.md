@@ -1,285 +1,418 @@
-# Power-BI---Supply-Chain-Analysis
-📊 Supply Chain Make vs Buy Scenario Analysis
+# 📊 Supply Chain Make vs Buy Analysis
 
 A complete end-to-end supply chain analytics project built in Microsoft Power BI to support Make vs Buy decision-making using dynamic scenario analysis, supplier evaluation, manufacturing capacity planning, and quality-adjusted cost modeling.
 
-📌 Project Overview
+---
 
-This project simulates a real-world supply chain case study for a fictional company, Tenate Industries, which manufactures replacement parts for industrial pizza ovens.
+# 🚀 Project Overview
+
+This project simulates a real-world supply chain case study for a fictional company, **Tenate Industries**, which manufactures replacement parts for industrial pizza ovens.
 
 The objective is to determine whether the company should:
 
-Buy components from external suppliers
-or Make them internally
+- 🛒 **Buy** components from external suppliers
+- 🏭 **Make** components internally
 
 The project evolves through 3 major analytical stages:
 
-Buy Option Analysis
-Scenario Planning & Volume Analysis
-Make vs Buy Optimization
+1. Buy Option Analysis
+2. Scenario Planning & Volume Analysis
+3. Make vs Buy Optimization
 
-The final solution combines:
+---
 
-Supplier quote analysis
-Dynamic production-volume simulation
-Manufacturing capacity planning
-Capital investment analysis
-Supplier quality/yield adjustments
-Row-level security (RLS)
-🧩 Project Structure
-1️⃣ Buy Option Analysis
-🎯 Objective
+# 🧩 Business Objectives
 
-Evaluate supplier quotes and identify the lowest total procurement cost for each product and volume combination.
+- Evaluate supplier quotes dynamically
+- Compare supplier pricing across production volumes
+- Build scenario-based procurement analysis
+- Analyze internal manufacturing feasibility
+- Calculate capital investment requirements
+- Determine optimal Make vs Buy strategy
+- Adjust procurement costs based on supplier quality yield
+- Implement Row-Level Security (RLS)
 
-📌 Key Concepts
-Supplier Quotes
+---
+
+# 🛒 Phase 1 — Buy Option Analysis
+
+## 🎯 Objective
+
+Evaluate supplier quotes and identify the lowest total procurement cost for each product and production volume combination.
+
+---
+
+## 📌 Key Concepts
+
+### Supplier Quotes
 
 Each supplier quote includes:
 
-Part Number
-Supplier Name
-Minimum Production Volume
-Unit Cost
-Non-Recurring Expenses (NRE)
-Extended Cost
+- Part Number
+- Supplier Name
+- Minimum Production Volume
+- Unit Cost
+- Non-Recurring Expenses (NRE)
 
-Calculated as:
+---
 
-Extended Cost = Unit Cost × Volume
+## 💰 Cost Calculations
 
-Represents only the product purchasing cost.
+### Extended Cost
 
-Full Cost
+```DAX
+Extended Cost =
+Quotes[Unit Cost] * Quotes[Volume]
+```
 
-Calculated as:
+Represents only the purchasing cost of products.
 
-Full Cost = Extended Cost + Non-Recurring Expenses
+---
+
+### Full Cost
+
+```DAX
+Full Cost =
+[Extended Cost] + Quotes[Non-Recurring Expenses]
+```
 
 Represents the total procurement cost.
 
-📊 Visualizations Built
-Supplier quote comparison tables
-Unit cost vs volume line charts
-Non-recurring expense trend charts
-Lowest-cost supplier card visualization
-Cost breakdown stacked bar chart
-Interactive slicers for:
-Part Number
-Volume
-🛠 DAX & Modeling
-Calculated columns for:
-Extended Cost
-Full Cost
-Bottom-N filtering for supplier selection
-Interactive report behavior using Edit Interactions
-🔍 Key Insight
+---
 
-Supplier pricing behavior changes significantly with production volume. The lowest unit cost supplier is not always the lowest full-cost supplier due to non-recurring expenses.
+## 📊 Visualizations Built
 
-2️⃣ Scenario Planning & Volume Analysis
-🎯 Objective
+- Supplier quote comparison tables
+- Unit cost vs volume line charts
+- Non-recurring expense trend charts
+- Lowest-cost supplier KPI card
+- Cost breakdown stacked bar chart
+- Interactive slicers for:
+  - Part Number
+  - Volume
 
-Build a dynamic scenario analysis tool that evaluates supplier costs for production volumes beyond quoted values.
+---
 
-📌 Business Challenge
+## 🛠 DAX & Modeling Techniques
 
-Real-world demand is uncertain. Companies rarely order exact quoted volumes, so decision-makers need flexible cost simulation tools.
+- Calculated Columns
+- Bottom-N filtering
+- Interactive report behavior
+- Dynamic filtering using slicers
+- Edit Interactions
 
-⚙️ Scenario Volume Parameter
+---
+
+## 🔍 Key Insight
+
+Supplier pricing changes significantly with production volume. The supplier with the lowest unit cost is not always the supplier with the lowest total full cost due to non-recurring expenses.
+
+---
+
+# 📈 Phase 2 — Scenario Planning & Volume Analysis
+
+## 🎯 Objective
+
+Build a dynamic scenario analysis tool that evaluates supplier costs across production volumes beyond quoted values.
+
+---
+
+## 📌 Business Challenge
+
+Real-world demand is uncertain. Companies rarely order exact quoted volumes, making dynamic scenario analysis critical for procurement planning.
+
+---
+
+## ⚙️ Scenario Volume Parameter
 
 Created a dynamic numeric parameter:
 
-Range: 1,000 → 100,000 units
-Increment: 500 units
-Controlled via slicer
+| Setting | Value |
+|---|---|
+| Minimum Volume | 1,000 |
+| Maximum Volume | 100,000 |
+| Increment | 500 |
+| Default Value | 15,000 |
 
-This allows real-time demand simulation.
+Controlled through an interactive slicer.
 
-📌 Dynamic Cost Measures
-Scenario Full Cost
+---
 
-Built using:
+## 📌 Scenario Full Cost Measure
 
-MINX()
-FILTER()
+### Dynamic Full Cost Logic
 
-The model:
+```DAX
+Scenario Full Cost =
+MINX(
+    FILTER(
+        Quotes,
+        Quotes[Volume] <= [Scenario Volume Value]
+    ),
+    Quotes[Unit Cost] * [Scenario Volume Value]
+        + Quotes[Non-Recurring Expenses]
+)
+```
 
-Evaluates all eligible supplier quotes
+---
 
-Filters quotes where:
+## 📊 Advanced Visualizations
 
-Quote Volume <= Scenario Volume
-Returns the minimum valid full cost
-📈 Advanced Visualizations
-Dynamic supplier cost trend line charts
-Volume-based cost comparison
-Scenario reference constant line
-Lowest-cost supplier KPI card
-🔐 Row-Level Security (RLS)
+- Dynamic supplier cost trend analysis
+- Volume-based supplier comparison
+- Scenario constant reference line
+- Lowest-cost supplier KPI
+- Scenario planning dashboard
 
-Implemented security roles:
+---
 
-Project Siliode Team Member
-Project Kerfuffle
+# 🔐 Row-Level Security (RLS)
 
-Users only see project-specific records.
+Implemented project-specific security roles:
 
-🔍 Key Insight
+- Project Siliode Team Member
+- Project Kerfuffle
 
-Supplier competitiveness changes dramatically across production volumes. Scenario-based planning enables more accurate procurement strategies than static quote analysis.
+Users only see records related to their assigned project.
 
-3️⃣ Make vs Buy Optimization
-🎯 Objective
+---
+
+## 🔍 Key Insight
+
+Supplier competitiveness changes dramatically across different production volumes. Scenario planning enables more accurate procurement strategies compared to static quote analysis.
+
+---
+
+# 🏭 Phase 3 — Make vs Buy Optimization
+
+## 🎯 Objective
 
 Compare internal manufacturing costs against supplier procurement costs to determine the optimal sourcing strategy.
 
-🏭 Internal Manufacturing Analysis
-📌 Internal Manufacturing Data
+---
 
-Internal estimates include:
+# 🏭 Internal Manufacturing Analysis
 
-Cost per Unit
-Existing Manufacturing Capacity
-Machine Capacity
-Machine Investment Cost
-Machine Model
-📌 Incremental Cost Logic
+## 📌 Internal Manufacturing Data
 
-The project distinguishes between:
+Internal manufacturing estimates include:
 
-Sunk Costs → ignored
-Incremental Costs → included
+- Cost per Unit
+- Existing Manufacturing Capacity
+- Machine Capacity
+- Machine Investment Cost
+- Machine Model
 
-Only new investments required to meet demand are considered.
+---
 
-⚙️ Capacity Gap Analysis
-Additional Capacity Required
+## 📌 Incremental Cost Logic
 
-Calculated as:
+The model distinguishes between:
 
+| Cost Type | Treatment |
+|---|---|
+| Sunk Costs | Ignored |
+| Incremental Costs | Included |
+
+Only new investments required to meet demand are included in the analysis.
+
+---
+
+# ⚙️ Capacity Gap Analysis
+
+## Additional Capacity Required
+
+```DAX
 Additional Capacity Required =
-Scenario Volume - Existing Capacity
+MAX(
+    0,
+    [Scenario Volume Value]
+        - Internal_Mfg_Resource_Estimates[Existing Capacity]
+)
+```
 
-If existing capacity exceeds demand:
+---
 
-Required Capacity = 0
-⚙️ Equipment Investment Calculation
-Machines Required
+# ⚙️ Equipment Investment Calculation
 
-Calculated using:
+## Machines Required
 
+```DAX
 Machines Required =
 ROUNDUP(
-Additional Capacity Required / Unit Capacity per Machine
+    [Additional Capacity Required]
+        / Internal_Mfg_Resource_Estimates[Unit Capacity],
+    0
 )
-Capital Investment Required
-Capital Investment =
-Machines Required × Machine Fixed Cost
-📌 Make Scenario Full Cost
-Make Full Cost =
-(Unit Cost × Scenario Volume)
-+ Capital Investment Required
-⚖️ Make vs Buy Decision Engine
-📌 Decision Logic
+```
 
-The report dynamically recommends:
+---
 
-Make
-or Buy
+## Capital Investment Required
 
-Based on whichever option has lower total cost.
+```DAX
+Capital Investment Required =
+[Machines Required]
+*
+Internal_Mfg_Resource_Estimates[Machine Fixed Cost]
+```
 
-📌 Cost Avoidance Measure
+---
+
+## Make Scenario Full Cost
+
+```DAX
+Make Scenario Full Cost =
+(
+    [Scenario Volume Value]
+    * Internal_Mfg_Resource_Estimates[Cost per Unit]
+)
++
+[Capital Investment Required]
+```
+
+---
+
+# ⚖️ Make vs Buy Decision Engine
+
+## 📌 Decision Logic
+
+The dashboard dynamically recommends:
+
+- 🏭 Make
+- 🛒 Buy
+
+based on whichever option has the lower total full cost.
+
+---
+
+## 📌 Cost Avoidance Measure
+
+```DAX
 Cost Avoidance =
 ABS(
-Make Scenario Full Cost
--
-Buy Scenario Full Cost
+    [Make Scenario Full Cost]
+    -
+    [Buy Scenario Full Cost]
 )
+```
 
-Quantifies savings from the recommended decision.
+Measures the savings generated by selecting the optimal sourcing strategy.
 
-🧪 Supplier Quality & Yield Adjustment
-📌 Business Enhancement
+---
 
-The quality team identified poor supplier yield rates:
+# 🧪 Supplier Quality & Yield Adjustment
 
-Supplier	Yield Rate
-Widgetmakers, Inc	72%
-Ringo Nova	83%
-Other Suppliers	98%
-📌 Yield-Adjusted Purchasing
+## 📌 Business Enhancement
 
-To meet production demand:
+The quality team identified supplier yield issues:
 
+| Supplier | Yield Rate |
+|---|---|
+| Widgetmakers, Inc | 72% |
+| Ringo Nova | 83% |
+| Other Suppliers | 98% |
+
+---
+
+## 📌 Yield-Adjusted Procurement
+
+```DAX
 Required Order Quantity =
-Scenario Volume / Yield Rate
+[Scenario Volume Value] / [Yield Rate]
+```
 
-This adjusts procurement cost for defective units.
+This adjusts procurement quantities to account for defective units.
 
-🔍 Key Insight
+---
 
-Supplier quality significantly impacts actual procurement cost. A lower-priced supplier may become more expensive after accounting for defects and yield loss.
+## 🔍 Key Insight
 
-📊 Dashboard Features
-Dynamic Scenario Volume slicer
-Supplier selection dashboard
-Cost trend analysis
-Make vs Buy recommendation engine
-Cost avoidance KPI
-Manufacturing capacity planning
-Quality-adjusted supplier comparison
-Row-level security
-🛠 Tools & Technologies
-Microsoft Power BI
-DAX (Data Analysis Expressions)
-Iterative Functions:
-MINX()
-FILTER()
-ROUNDUP()
-FIRSTNONBLANK()
-Data Modeling
-Scenario Parameters
-Row-Level Security (RLS)
-📷 Dashboard Preview
+Supplier quality significantly impacts procurement cost. Lower-priced suppliers may become more expensive once yield losses are considered.
 
-(Add screenshots here)
+---
 
-Suggested screenshots:
+# 📊 Dashboard Features
 
-Supplier Selection Dashboard
-Scenario Analysis Page
-Make vs Buy Comparison
-Cost Trend Line Charts
-Manufacturing Capacity Analysis
-🚀 How to Use
-Download SCM analysis.pbix
-Open in Power BI Desktop
-Adjust the Scenario Volume slicer
-Explore:
-Supplier rankings
-Full cost analysis
-Make vs Buy recommendations
-Capacity investment impacts
-Yield-adjusted procurement costs
-📌 Business Value
+✅ Dynamic Scenario Volume Slicer  
+✅ Lowest Cost Supplier Identification  
+✅ Make vs Buy Recommendation Engine  
+✅ Cost Avoidance KPI  
+✅ Manufacturing Capacity Planning  
+✅ Supplier Yield Adjustment  
+✅ Interactive Scenario Planning  
+✅ Row-Level Security (RLS)
+
+---
+
+# 🛠 Tools & Technologies
+
+| Tool | Purpose |
+|---|---|
+| Microsoft Power BI | Dashboard Development |
+| DAX | Business Logic & Calculations |
+| Power Query | Data Transformation |
+| Data Modeling | Relationship Management |
+| Row-Level Security | Access Control |
+
+---
+
+# 📷 Dashboard Preview
+
+## Supplier Selection Dashboard
+
+![Dashboard](images/dashboard1.png)
+
+---
+
+## Scenario Planning Dashboard
+
+![Dashboard](images/dashboard2.png)
+
+---
+
+## Make vs Buy Analysis Dashboard
+
+![Dashboard](images/dashboard3.png)
+
+---
+
+# 🚀 How to Use
+
+1. Download `SCM analysis.pbix`
+2. Open the file in Power BI Desktop
+3. Adjust the Scenario Volume slicer
+4. Explore:
+   - Supplier rankings
+   - Full cost analysis
+   - Make vs Buy recommendations
+   - Manufacturing investment requirements
+   - Yield-adjusted supplier costs
+
+---
+
+# 📌 Business Value
 
 This project demonstrates how supply chain analytics can support:
 
-Procurement optimization
-Manufacturing planning
-Capital investment decisions
-Demand uncertainty management
-Supplier quality evaluation
+- Procurement optimization
+- Manufacturing planning
+- Capital investment decisions
+- Demand uncertainty management
+- Supplier quality evaluation
+- Strategic sourcing decisions
 
-The solution transforms static quote analysis into a dynamic decision-support system.
+The solution transforms static supplier quotes into a dynamic decision-support system.
 
-⭐ Future Improvements
-Demand forecasting integration
-Monte Carlo simulation
-Supplier lead-time analysis
-Sustainability scoring
-Automated data refresh pipelines
-Deployment to Power BI Service
+---
+
+# ⭐ Future Improvements
+
+- Demand forecasting integration
+- Monte Carlo simulation
+- Supplier lead-time analysis
+- Sustainability scoring
+- Automated refresh pipelines
+- Power BI Service deployment
+
+---
