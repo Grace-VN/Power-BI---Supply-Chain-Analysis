@@ -373,7 +373,7 @@ Supplier quality significantly impacts procurement cost. Lower-priced suppliers 
 
 ## Make vs Buy Analysis Dashboard
 
-![Dashboard](images/Make vs Buy Analysis Dashboard.png)
+![Dashboard](images/Make-vs-Buy-Analysis-Dashboard.png)
 
 ---
 
